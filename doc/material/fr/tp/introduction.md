@@ -43,6 +43,15 @@ L'application repose sur liquibase pour gérer les migrations de la base de donn
 
 Référez-vous au fichier `README.md` dans le répertoire `libs/sql` pour plus d'informations sur la façon d'exécuter les migrations.
 
+:::tip
+Le projet embarque un "sidecar" liquibase (conteneur dédié). Pour exécutez les commandes `liquibase`, vous devez vous situer dedans. Sur votre hôte, dans un terminal :
+``` bash
+docker exec -it <id_conteneur> bash
+```
+
+... ainsi vous accédez à un terminal `bash` dans le conteneur liquibase dans lequel le binaire et la config BDD sont déjà présents.
+:::
+
 ## Lancer les différents modules
 
 Pour lancer les différents modules de l'application, utilisez le script Gradle `quarkusDev` pour chaque module.
