@@ -146,7 +146,9 @@ Votre IDE est normalement pré-paramétré pour exposer le port 5432 en local, v
 Vous remarquerez que la table `outbox` est vide. En effet, l'outbox ne contient en réalité que des données éphémères et transitoires. Les messages sont consommés rapidement après leur insertion, de sorte que la table reste généralement vide et le schéma de lecture `read_product_registry` est constamment mis à jour avec les dernières informations par l'application.
 :::
 
-## Limiter la consommation de ressources de l'environnement de développement
+## Gérer consommation de ressources de l'environnement de développement
+
+### Limiter la consommation de ressources
 
 Les environnements de développement Java peuvent être gourmands en ressources. Pour limiter la consommation de ressources de votre machine, vous pouvez ajuster les paramètres JVM dans les fichiers `gradle.properties` situés dans les répertoires des modules.
 
@@ -179,3 +181,61 @@ gradle <ma_commande> -Xmx200m
 ```bash
 NODE_OPTIONS="--max-old-space-size=200" pnpm run --filter apps-store-front start
 ```
+
+### Gradle.properties
+
+Voici un exemple de configuration `gradle.properties` pour limiter la consommation de mémoire :
+
+```properties
+org.gradle.jvmargs=-Xmx512m
+```
+
+Cette configuration est nécessaire en plus du réglage des variables d'environnement car les processus Quarkus et les extensions VSCode lancés par Gradle héritent de ces paramètres.
+
+### Paramètres JVM pour VsCode
+
+Pour limiter la consommation de mémoire des extensions Java dans VSCode, vous pouvez ajuster les paramètres JVM dans le fichier `settings.json` de VSCode.
+
+Voici un exemple de configuration pour limiter la mémoire à 512 Mo :
+
+```json
+{
+    "java.jdt.ls.vmargs": "-Xmx512m"
+}
+```
+
+### Docker : ajouter du swap sur la VM
+
+Si votre VM Docker manque de mémoire, vous pouvez ajouter du swap pour compenser. Voici comment faire :
+
+Sur l'hôte :
+
+```bash
+sudo swapoff /swapfile
+sudo rm /swapfile
+sudo fallocate -l 4G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+```
+
+Cette configuration augmente la taille du swap à 4 Go. Vous pouvez ajuster cette valeur en fonction de vos besoins. Notez cependant que l'utilisation de swap n'est pas aussi performante que la RAM physique ou virtuelle et que la place occupée par le swap se répercute directement sur votre disque dur.
+
+Vérifiez aussi que le swap disponible dans le conteneur correspond bien à vos attentes :
+
+```bash
+docker exec -it <id_conteneur> bash
+cat /proc/meminfo | grep Swap
+```
+
+Vous devriez voir une ligne indiquant la taille totale du swap disponible, par exemple :
+
+```
+SwapTotal:       4194300 kB
+```
+
+Vérifiez donc que la valeur affichée correspond bien à la taille que vous avez définie précédemment.
+
+### Conclusion
+
+En combinant et ajustant ces paramètres, vous devriez être en mesure de gérer efficacement la consommation de ressources de votre environnement de développement tout en travaillant sur l'application.
