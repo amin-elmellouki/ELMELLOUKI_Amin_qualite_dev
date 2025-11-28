@@ -145,3 +145,37 @@ Votre IDE est normalement pré-paramétré pour exposer le port 5432 en local, v
 :::tip
 Vous remarquerez que la table `outbox` est vide. En effet, l'outbox ne contient en réalité que des données éphémères et transitoires. Les messages sont consommés rapidement après leur insertion, de sorte que la table reste généralement vide et le schéma de lecture `read_product_registry` est constamment mis à jour avec les dernières informations par l'application.
 :::
+
+## Limiter la consommation de ressources de l'environnement de développement
+
+Les environnements de développement Java peuvent être gourmands en ressources. Pour limiter la consommation de ressources de votre machine, vous pouvez ajuster les paramètres JVM dans les fichiers `gradle.properties` situés dans les répertoires des modules.
+
+Il est aussi possible de définir des variables d'environnement pour gradle :
+
+- Limiter la mémoire maximale allouée à la JVM Gradle :
+
+```bash
+export GRADLE_OPTS="-Xmx512m"
+```
+
+ou dans le `docker-compose.yml` du devcontainer :
+
+```yaml
+services:
+# ...
+  dev:
+#   ...
+    environment:
+      - GRADLE_OPTS=-Xmx512m
+# ...
+```
+
+- Limiter la mémoire d'un service Quarkus :
+```bash
+gradle <ma_commande> -Xmx200m
+```
+
+- Limiter la mémoire du process Node.js pour le front-end :
+```bash
+NODE_OPTIONS="--max-old-space-size=200" pnpm run --filter apps-store-front start
+```
