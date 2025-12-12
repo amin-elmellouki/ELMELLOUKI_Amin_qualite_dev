@@ -126,13 +126,23 @@ catalog:
 ```
 :::
 
+::: warning
+Assurez-vous que votre conteneur ai accès à votre socket Docker pour que MegaLinter puisse fonctionner correctement.
+
+Autrement, vous pouvez aussi utiliser directement l'image docker de MegaLinter (pensez simplement à monter votre code source dans le conteneur en tant que volume ainsi que le socket Docker) :
+
+```bash
+docker run --rm -v /var/run/docker.sock:/var/run/docker.sock:rw -v $(pwd):/tmp/lint:rw oxsecurity/megalinter:v9
+```
+:::
+
 Configurez MegaLinter pour qu'il prenne en compte les spécificités de votre projet. Générez la configuration de base avec :
 
 ```bash
 pnpm mega-linter-runner --install
 ```
 
-Supprimez ensuite les fichiers de configurations que vous n'utiliserais pas.
+Supprimez ensuite les fichiers de configurations que vous n'utiliserez pas.
 
 Modifiez le fichier `.mega-linter.yml` pour qu'il prenne en compte les spécificités de votre projet. Par exemple, vous pouvez activer ou désactiver certains linters, ajuster les règles de style, etc.
 
