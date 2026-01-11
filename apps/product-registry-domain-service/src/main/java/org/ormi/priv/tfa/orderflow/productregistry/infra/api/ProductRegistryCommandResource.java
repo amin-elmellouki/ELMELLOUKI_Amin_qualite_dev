@@ -82,6 +82,11 @@ public class ProductRegistryCommandResource {
         final RegisterProductCommandDto cmd,
         @Context final UriInfo uriInfo
     ) {
+        if (isBlank(cmd == null ? null : cmd.name())
+            || isBlank(cmd.description())
+            || isBlank(cmd.skuId())) {
+            return RestResponse.status(RestResponse.Status.BAD_REQUEST);
+        }
         final ProductId productId = registerProductService
             .handle(mapper.toCommand(cmd));
         final URI location = uriInfo.getAbsolutePathBuilder()
@@ -120,6 +125,9 @@ public class ProductRegistryCommandResource {
         @PathParam("id") final String productId,
         final UpdateProductNameParamsDto params
     ) {
+        if (isBlank(params == null ? null : params.name())) {
+            return RestResponse.status(RestResponse.Status.BAD_REQUEST);
+        }
         ProductId parsedId = new ProductId(UUID.fromString(productId));
         updateProductService.handle(
             new UpdateProductNameCommand(parsedId, params.name())
@@ -141,6 +149,9 @@ public class ProductRegistryCommandResource {
         @PathParam("id") final String productId,
         final UpdateProductDescriptionParamsDto params
     ) {
+        if (isBlank(params == null ? null : params.description())) {
+            return RestResponse.status(RestResponse.Status.BAD_REQUEST);
+        }
         ProductId parsedId = new ProductId(UUID.fromString(productId));
         updateProductService.handle(
             new UpdateProductDescriptionCommand(
@@ -149,5 +160,9 @@ public class ProductRegistryCommandResource {
             )
         );
         return RestResponse.noContent();
+    }
+
+    private static boolean isBlank(String value) {
+        return value == null || value.isBlank();
     }
 }
