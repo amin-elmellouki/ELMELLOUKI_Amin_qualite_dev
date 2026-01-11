@@ -16,43 +16,62 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
 /**
- * TODO: Complete Javadoc
+ * Repository JPA pour la persistance des produits.
+ *
+ * Mappe l'agregat de domaine vers l'entite JPA et inversement.
  */
 
 @ApplicationScoped
-public class JpaProductRepository implements PanacheRepositoryBase<ProductEntity, UUID>, ProductRepository {
+public final class JpaProductRepository
+    implements PanacheRepositoryBase<ProductEntity, UUID>,
+        ProductRepository {
 
-    ProductJpaMapper mapper;
-    ProductIdMapper productIdMapper;    
-    SkuIdMapper skuIdMapper;
+    /** Mapper entre agregat de domaine et entite JPA. */
+    private final ProductJpaMapper mapper;
+    /** Mapper d'identifiant produit. */
+    private final ProductIdMapper productIdMapper;
+    /** Mapper d'identifiant SKU. */
+    private final SkuIdMapper skuIdMapper;
 
+    /**
+     * Construit le repository JPA.
+     *
+     * @param productJpaMapper mapper produit <-> entite
+     * @param productIdMapperInstance mapper d'identifiant produit
+     * @param skuIdMapperInstance mapper de SKU
+     */
     @Inject
-    public JpaProductRepository(ProductJpaMapper mapper, ProductIdMapper productIdMapper, SkuIdMapper skuIdMapper) {
-        this.mapper = mapper;
-        this.productIdMapper = productIdMapper;
-        this.skuIdMapper = skuIdMapper;
+    public JpaProductRepository(
+        final ProductJpaMapper productJpaMapper,
+        final ProductIdMapper productIdMapperInstance,
+        final SkuIdMapper skuIdMapperInstance
+    ) {
+        this.mapper = productJpaMapper;
+        this.productIdMapper = productIdMapperInstance;
+        this.skuIdMapper = skuIdMapperInstance;
     }
 
     @Override
     @Transactional
-    public void save(Product product) {
+    public void save(final Product product) {
         findByIdOptional(productIdMapper.map(product.getId()))
-                .ifPresentOrElse(e -> {
-                    mapper.updateEntity(product, e);
-                }, () -> {
+            .ifPresentOrElse(
+                entity -> mapper.updateEntity(product, entity),
+                () -> {
                     ProductEntity newEntity = mapper.toEntity(product);
                     getEntityManager().merge(newEntity);
-                });
+                }
+            );
     }
 
     @Override
-    public Optional<Product> findById(ProductId id) {
+    public Optional<Product> findById(final ProductId id) {
         return findByIdOptional(productIdMapper.map(id))
-                .map(mapper::toDomain);
+            .map(mapper::toDomain);
     }
 
     @Override
-    public boolean existsBySkuId(SkuId skuId) {
+    public boolean existsBySkuId(final SkuId skuId) {
         return count("skuId", skuIdMapper.map(skuId)) > 0;
     }
 }

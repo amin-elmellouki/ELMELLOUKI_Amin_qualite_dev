@@ -15,29 +15,62 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
 /**
- * TODO: Complete Javadoc
+ * Service applicatif pour retirer un produit du catalogue.
+ *
+ * Charge le produit par son identifiant, exécute la transition métier
+ * de retrait, persiste l'agrégat, puis journalise et publie l'événement
+ * de domaine via le journal des événements et l'outbox.
  */
 @ApplicationScoped
 public class RetireProductService {
 
-    @Inject
-    ProductRepository repository;
-    @Inject
-    EventLogRepository eventLog;
-    @Inject
-    OutboxRepository outbox;
+    /** Repository de persistance des produits. */
+    private final ProductRepository repository;
+    /** Journal des evenements pour la publication. */
+    private final EventLogRepository eventLog;
+    /** Outbox de publication des evenements. */
+    private final OutboxRepository outbox;
 
+    /**
+     * Construit le service avec ses dependances.
+     *
+     * @param productRepository depot des produits
+     * @param eventLogRepository journal des evenements
+     * @param outboxRepository outbox de publication
+     */
+    @Inject
+    public RetireProductService(
+        final ProductRepository productRepository,
+        final EventLogRepository eventLogRepository,
+        final OutboxRepository outboxRepository
+    ) {
+        this.repository = productRepository;
+        this.eventLog = eventLogRepository;
+        this.outbox = outboxRepository;
+    }
+
+    /**
+     * Retire un produit en appliquant la transition metier.
+     *
+     * @param cmd commande de retrait
+     * @throws IllegalArgumentException si le produit n'existe pas
+     */
     @Transactional
-    public void retire(RetireProductCommand cmd) throws IllegalArgumentException {
+    public void retire(final RetireProductCommand cmd)
+        throws IllegalArgumentException {
         Product product = repository.findById(cmd.productId())
-                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
-        EventEnvelope<ProductRetired> evt = product.retire();
+            .orElseThrow(
+                () -> new IllegalArgumentException("Product not found")
+            );
+        EventEnvelope<ProductRetired> event = product.retire();
         repository.save(product);
         // Append event to the log
-        final EventLogEntity persistedEvent = eventLog.append(evt);
+        final EventLogEntity persistedEvent = eventLog.append(event);
         // Publish outbox
-        outbox.publish(OutboxEntity.Builder()
+        outbox.publish(
+            OutboxEntity.Builder()
                 .sourceEvent(persistedEvent)
-                .build());
+                .build()
+        );
     }
 }

@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * TODO: Complete Javadoc
+ * Entite JPA representant un produit dans la base.
  */
 
 @Getter
@@ -31,18 +31,56 @@ import lombok.Setter;
         @Index(name = "ux_products_sku", columnList = "sku", unique = true)
     })
 public class ProductEntity {
+
+    /** Longueur maximale du SKU. */
+    private static final int SKU_LENGTH = 9;
+
+    /** Identifiant technique du produit. */
     @Id
-    @Column(name = "id", nullable = false, updatable = false, columnDefinition = "uuid")
+    @Column(
+        name = "id",
+        nullable = false,
+        updatable = false,
+        columnDefinition = "uuid"
+    )
     private UUID id;
-    @Column(name = "name", nullable = false, columnDefinition = "text")
+    /** Nom du produit. */
+    @Column(
+        name = "name",
+        nullable = false,
+        columnDefinition = "text"
+    )
     private String name;
-    @Column(name = "description", nullable = false, columnDefinition = "text")
+    /** Description du produit. */
+    @Column(
+        name = "description",
+        nullable = false,
+        columnDefinition = "text"
+    )
     private String description;
-    @Column(name = "sku_id", nullable = false, updatable = false, length = 9, unique = true, columnDefinition = "varchar(9)")
+    /** SKU du produit. */
+    @Column(
+        name = "sku_id",
+        nullable = false,
+        updatable = false,
+        length = SKU_LENGTH,
+        unique = true,
+        columnDefinition = "varchar(9)"
+    )
     private String skuId;
+    /** Statut du cycle de vie. */
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false, columnDefinition = "text")
+    @Column(
+        name = "status",
+        nullable = false,
+        columnDefinition = "text"
+    )
     private ProductLifecycle status;
-    @Column(name = "version", nullable = false, columnDefinition = "bigint")
+    /** Version pour le controle de concurrence. */
+    @Column(
+        name = "version",
+        nullable = false,
+        columnDefinition = "bigint"
+    )
     private Long version;
 }

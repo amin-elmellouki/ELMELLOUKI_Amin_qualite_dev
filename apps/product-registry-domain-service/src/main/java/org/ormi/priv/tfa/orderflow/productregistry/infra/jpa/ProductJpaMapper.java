@@ -9,7 +9,7 @@ import org.ormi.priv.tfa.orderflow.kernel.product.ProductIdMapper;
 import org.ormi.priv.tfa.orderflow.kernel.product.SkuIdMapper;
 
 /**
- * TODO: Complete Javadoc
+ * Mapper MapStruct entre l'agregat Product et l'entite JPA.
  */
 
 @Mapper(
@@ -20,9 +20,30 @@ import org.ormi.priv.tfa.orderflow.kernel.product.SkuIdMapper;
 )
 public abstract class ProductJpaMapper {
 
+    /**
+     * Convertit une entite JPA en agregat domaine.
+     *
+     * @param entity entite JPA
+     * @return agregat domaine
+     */
     public abstract Product toDomain(ProductEntity entity);
 
-    public abstract void updateEntity(Product product, @MappingTarget ProductEntity entity);
+    /**
+     * Met a jour une entite existante a partir de l'agregat.
+     *
+     * @param product agregat domaine
+     * @param entity entite JPA cible
+     */
+    public abstract void updateEntity(
+        Product product,
+        @MappingTarget ProductEntity entity
+    );
 
+    /**
+     * Convertit un agregat domaine en entite JPA.
+     *
+     * @param product agregat domaine
+     * @return entite JPA
+     */
     public abstract ProductEntity toEntity(Product product);
 }

@@ -8,7 +8,7 @@ import org.ormi.priv.tfa.orderflow.contracts.productregistry.v1.write.RegisterPr
 import org.ormi.priv.tfa.orderflow.kernel.product.SkuIdMapper;
 
 /**
- * TODO: Complete Javadoc
+ * Mapper MapStruct entre DTO de commande et commande applicative.
  */
 
 @Mapper(
@@ -18,6 +18,19 @@ import org.ormi.priv.tfa.orderflow.kernel.product.SkuIdMapper;
     unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public interface CommandDtoMapper {
-    public RegisterProductCommand toCommand(RegisterProductCommandDto dto);
-    public RegisterProductCommandDto toDto(RegisterProductCommand command);
+    /**
+     * Convertit un DTO de commande en commande applicative.
+     *
+     * @param dto DTO entrant
+     * @return commande applicative
+     */
+    RegisterProductCommand toCommand(RegisterProductCommandDto dto);
+
+    /**
+     * Convertit une commande applicative en DTO.
+     *
+     * @param command commande applicative
+     * @return DTO de commande
+     */
+    RegisterProductCommandDto toDto(RegisterProductCommand command);
 }
