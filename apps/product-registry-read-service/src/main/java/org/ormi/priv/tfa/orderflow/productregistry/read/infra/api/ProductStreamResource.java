@@ -3,9 +3,8 @@ package org.ormi.priv.tfa.orderflow.productregistry.read.infra.api;
 import jakarta.ws.rs.Path;
 
 /**
- * TODO: Complete Javadoc
+ * Ressource REST de streaming pour les mises a jour produit.
  */
-
 @Path("/products")
 public class ProductStreamResource {
 

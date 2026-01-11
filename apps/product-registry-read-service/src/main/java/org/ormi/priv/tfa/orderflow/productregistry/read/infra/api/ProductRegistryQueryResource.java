@@ -22,9 +22,8 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 
 /**
- * TODO: Complete Javadoc
+ * Ressource REST de consultation des produits.
  */
-
 @Path("/products")
 @Produces(MediaType.APPLICATION_JSON)
 public class ProductRegistryQueryResource {

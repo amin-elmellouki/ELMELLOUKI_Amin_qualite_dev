@@ -22,9 +22,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * TODO: Complete Javadoc
+ * Entite JPA de la vue de lecture des produits.
  */
-
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)

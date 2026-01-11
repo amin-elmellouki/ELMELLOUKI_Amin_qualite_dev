@@ -22,7 +22,7 @@ import org.ormi.priv.tfa.orderflow.kernel.product.views.ProductView.ProductViewE
 import jakarta.enterprise.context.ApplicationScoped;
 
 /**
- * TODO: Complete Javadoc
+ * Projette les evenements produit vers une vue de lecture ProductView.
  */
 @ApplicationScoped
 public class ProductViewProjector implements Projector<ProductView, ProductEventV1Envelope<?>> {

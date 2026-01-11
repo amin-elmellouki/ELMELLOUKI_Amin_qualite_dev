@@ -5,9 +5,9 @@ import io.quarkus.runtime.QuarkusApplication;
 import io.quarkus.runtime.annotations.QuarkusMain;
 
 /**
- * TODO: Complete Javadoc
+ * Point d'entree du service de lecture du registre de produits.
+ * Lance Quarkus et conserve l'application active jusqu'a l'arret du processus.
  */
-
 @QuarkusMain
 public class Main {
 

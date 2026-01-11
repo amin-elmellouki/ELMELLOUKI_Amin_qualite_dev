@@ -18,9 +18,8 @@ import jakarta.resource.spi.IllegalStateException;
 import jakarta.transaction.Transactional;
 
 /**
- * TODO: Complete Javadoc
+ * Orchestre la projection des evenements produit et la diffusion aux clients.
  */
-
 @ApplicationScoped
 public class ProjectionDispatcher {
     private static final String PRODUCT_AGGREGATE_TYPE = Product.class.getSimpleName();

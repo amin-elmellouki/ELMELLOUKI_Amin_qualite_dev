@@ -3,9 +3,8 @@ package org.ormi.priv.tfa.orderflow.productregistry.read.application;
 import org.ormi.priv.tfa.orderflow.kernel.product.ProductId;
 
 /**
- * TODO: Complete Javadoc
+ * Definit les requetes de lecture du registre produit.
  */
-
 public sealed interface ProductQuery {
     public record GetProductByIdQuery(ProductId productId) implements ProductQuery {
     }

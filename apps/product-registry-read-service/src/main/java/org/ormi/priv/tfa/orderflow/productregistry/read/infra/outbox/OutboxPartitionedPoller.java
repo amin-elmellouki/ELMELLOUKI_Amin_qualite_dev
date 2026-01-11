@@ -33,9 +33,8 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
 /**
- * TODO: Complete Javadoc
+ * Poller partitionne de l'outbox pour projeter les evenements produit.
  */
-
 @ApplicationScoped
 @Startup
 public class OutboxPartitionedPoller {

@@ -28,9 +28,8 @@ import org.ormi.priv.tfa.orderflow.kernel.product.views.ProductView.ProductViewC
 import org.ormi.priv.tfa.orderflow.kernel.product.views.ProductView.ProductViewEvent;
 
 /**
- * TODO: Complete Javadoc
+ * Mapper MapStruct entre la vue produit et les DTO exposes par l'API.
  */
-
 @Mapper(componentModel = "cdi", builder = @Builder(disableBuilder = false), uses = {
         ProductIdMapper.class,
         SkuIdMapper.class,

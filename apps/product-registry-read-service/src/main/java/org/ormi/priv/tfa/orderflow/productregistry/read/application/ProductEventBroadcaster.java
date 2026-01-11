@@ -9,9 +9,8 @@ import io.smallrye.mutiny.subscription.MultiEmitter;
 import jakarta.enterprise.context.ApplicationScoped;
 
 /**
- * TODO: Complete Javadoc
+ * Diffuse les evenements produit aux abonnes via un flux reactif.
  */
-
 @ApplicationScoped
 public class ProductEventBroadcaster {
 
